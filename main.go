@@ -1,53 +1,42 @@
 package main
 
 import (
+	"github.com/go-chi/chi"
 	"io"
 	"net/http"
-	"strconv"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/robertscherbarth/go-service-skeleton/pkg/app"
 	requestLogger "github.com/robertscherbarth/go-service-skeleton/pkg/log"
 )
 
 const port = 8080
 
 func main() {
-	r := chi.NewRouter()
-
 	logger := log.New()
 	logger.Formatter = &log.TextFormatter{
 		DisableTimestamp: true,
 	}
 
-	r.Use(middleware.RealIP)
-	r.Use(requestLogger.NewStructuredLogger(logger))
-	r.Use(middleware.Recoverer)
+	logger.Infof("starting service ...")
+	runningService(logger)
 
-	logger.Infof("Starting service ...")
-	r.HandleFunc("/", mainHandler)
+}
 
-	r.Route("/admin", func(r chi.Router) {
-		r.HandleFunc("/health", healthCheckHandler)
-		r.Handle("/metrics", promhttp.Handler())
-	})
+func runningService(logger *log.Logger) {
+	router := chi.NewRouter()
 
-	if err := http.ListenAndServe(":"+strconv.Itoa(port), r); err != nil {
-		logger.Infoln("... shutting down")
-	}
+	//define additional routes
+	router.HandleFunc("/", mainHandler)
+
+	app := app.NewApp(&app.Config{HTTPListenPort: port}, router, logger)
+	app.CreateRouteConfiguration(requestLogger.NewStructuredLogger(logger))
+
+	app.Start()
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, `implement me`)
-}
-
-func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-
-	io.WriteString(w, `{"status": "up"}`)
 }
