@@ -7,6 +7,8 @@ github.com/go-chi/chi
 github.com/go-chi/chi/middleware
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
+# github.com/kelseyhightower/envconfig v1.4.0
+github.com/kelseyhightower/envconfig
 # github.com/konsorten/go-windows-terminal-sequences v1.0.1
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
