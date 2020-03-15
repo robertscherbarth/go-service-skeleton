@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-chi/chi"
 	"io"
 	"net/http"
 	"os"
@@ -11,7 +10,6 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/robertscherbarth/go-service-skeleton/pkg/app"
-	requestLogger "github.com/robertscherbarth/go-service-skeleton/pkg/log"
 )
 
 type ServiceConfig struct {
@@ -29,18 +27,16 @@ func main() {
 
 	logger := createLogger(serviceConfig.LogFormat)
 	logger.Infof("starting service ...")
-	runningService(logger, serviceConfig)
+	runService(logger, serviceConfig)
 
 }
 
-func runningService(logger *log.Logger, config ServiceConfig) {
-	router := chi.NewRouter()
+func runService(logger *log.Logger, config ServiceConfig) {
+	app := app.NewApp(&app.Config{HTTPListenPort: config.Port}, logger)
+	app.CreateRouteConfiguration()
 
 	//TODO: define additional routes
-	router.HandleFunc("/", mainHandler)
-
-	app := app.NewApp(&app.Config{HTTPListenPort: config.Port}, router, logger)
-	app.CreateRouteConfiguration(requestLogger.NewStructuredLogger(logger))
+	app.AddRoute("/", mainHandler)
 
 	app.Start()
 }
