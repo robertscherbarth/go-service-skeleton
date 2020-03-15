@@ -102,10 +102,6 @@ func (a *App) AddRoute(pattern string, handleFn http.HandlerFunc) {
 	a.router.HandleFunc(pattern, handleFn)
 }
 
-func (a *App) UpdateRouter(router *chi.Mux) {
-	a.server.Handler = router
-}
-
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
