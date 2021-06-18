@@ -1,6 +1,6 @@
 module github.com/robertscherbarth/go-service-skeleton
 
-go 1.13
+go 1.16
 
 require (
 	github.com/go-chi/chi v4.0.3+incompatible
