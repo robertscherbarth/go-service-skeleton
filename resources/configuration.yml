@@ -1,0 +1,14 @@
+name: "skeleton-service"
+
+logger:
+  level: 0
+  encoding: "console"
+
+http:
+  port: 8080
+
+metrics:
+  namespace: ""
+
+profiling:
+  enabled: false
