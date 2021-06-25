@@ -27,6 +27,8 @@ type HTTP struct {
 }
 
 type Metrics struct {
+	Enabled   bool
+	Path      string
 	Namespace string
 }
 

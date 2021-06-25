@@ -8,6 +8,8 @@ http:
   port: 8080
 
 metrics:
+  enabled: true
+  path: "/metrics"
   namespace: ""
 
 profiling:

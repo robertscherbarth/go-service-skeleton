@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/robertscherbarth/go-service-skeleton/pkg/config"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -15,7 +15,11 @@ import (
 
 	"github.com/go-chi/chi"
 	mw "github.com/go-chi/chi/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
+
+	"github.com/robertscherbarth/go-service-skeleton/pkg/api/middleware"
+	"github.com/robertscherbarth/go-service-skeleton/pkg/config"
 )
 
 type Server struct {
@@ -26,7 +30,7 @@ type Server struct {
 	router         chi.Router
 }
 
-func NewServer(logger *zap.Logger, config config.HTTP) *Server {
+func NewServer(logger *zap.Logger, config config.HTTP, serviceName string, metrics config.Metrics) *Server {
 	router := chi.NewRouter()
 	s := &Server{
 		logger:         logger,
@@ -40,11 +44,55 @@ func NewServer(logger *zap.Logger, config config.HTTP) *Server {
 	if config.Profiling.Enabled {
 		s.InjectProfiling()
 	}
+
+	s.router.Use(
+		middleware.RequestLogger(logger, serviceName),
+	)
+
+	if metrics.Enabled {
+		s.router.Use(middleware.MeasureResponseDuration(metrics.Namespace))
+		s.InitializeMetrics(metrics)
+	}
+
 	return s
+}
+
+func (s *Server) InitializeAdminRoutes() {
+	s.router.Route("/admin", func(r chi.Router) {
+		r.Get("/healthcheck", s.handleHealthCheck())
+		r.Get("/metrics", s.handleMetrics())
+	})
 }
 
 func (s *Server) InjectProfiling() {
 	s.router.Mount("/debug", mw.Profiler())
+}
+
+// @Description Returns everytime a 200 response code and a simple json which says {status: up}
+// @Tags infrastructure
+// @Produce json
+// @Success 200
+// @Router /admin/healthcheck [get]
+func (s *Server) handleHealthCheck() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+
+		io.WriteString(w, `{"status": "up"}`)
+	}
+}
+
+func (s *Server) InitializeMetrics(config config.Metrics) {
+	s.router.Get(config.Path, s.handleMetrics())
+	s.logger.Info(fmt.Sprintf("initialize metrics to path %s", config.Path))
+}
+
+// @Description Returns the metrics for prometheus
+// @Tags infrastructure
+// @Success 200
+// @Router /admin/metrics [get]
+func (s *Server) handleMetrics() http.HandlerFunc {
+	return promhttp.Handler().ServeHTTP
 }
 
 func (s *Server) Run() error {

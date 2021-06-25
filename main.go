@@ -19,7 +19,7 @@ func main() {
 
 	logger, err := config.CreateLogger(configuration.Logger.Level, configuration.Logger.Encoding)
 
-	server := api.NewServer(logger, configuration.HTTP)
+	server := api.NewServer(logger, configuration.HTTP, configuration.Name, configuration.Metrics)
 
 	server.Run()
 }
