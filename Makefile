@@ -1,14 +1,14 @@
 run: ## Run the service
-	go run .
+	go run ./cmd/service/.
 
 build: ## Build the service
-	go build -o main .
+	go build -o main ./cmd/service/.
 
 fmt: ## Run go fmt against code
-	go fmt ./pkg/... .
+	go fmt ./pkg/... ./cmd/...
 
 vet: ## Run go vet against code
-	go vet ./pkg/... .
+	go vet ./pkg/... ./cmd/...
 
 test: ## Runs the tests
 	go test -cover -race -short -v $(shell go list ./... | grep -v /vendor/ )

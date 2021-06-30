@@ -2,7 +2,7 @@ name: "skeleton-service"
 
 logger:
   level: 0
-  encoding: "console"
+  encoding: "json"
 
 http:
   port: 8080

@@ -59,8 +59,7 @@ func NewServer(logger *zap.Logger, config config.HTTP, serviceName string, metri
 
 func (s *Server) InitializeAdminRoutes() {
 	s.router.Route("/admin", func(r chi.Router) {
-		r.Get("/healthcheck", s.handleHealthCheck())
-		r.Get("/metrics", s.handleMetrics())
+		r.Get("/health", s.handleHealthCheck())
 	})
 }
 
@@ -72,7 +71,7 @@ func (s *Server) InjectProfiling() {
 // @Tags infrastructure
 // @Produce json
 // @Success 200
-// @Router /admin/healthcheck [get]
+// @Router /health [get]
 func (s *Server) handleHealthCheck() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"go.uber.org/zap/zapcore"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -40,6 +41,11 @@ func Read(prefix, configPath string) (Configuration, error) {
 	path, extension := filepath.Dir(configPath), filepath.Ext(configPath)
 	file := strings.TrimSuffix(filepath.Base(configPath), extension)
 
+	_, err := os.Stat(path)
+	if err != nil {
+		fmt.Println("can't find config file")
+	}
+
 	viper.AddConfigPath(path)
 	viper.SetConfigName(file)
 	viper.SetConfigType(extension[1:])
@@ -53,7 +59,7 @@ func Read(prefix, configPath string) (Configuration, error) {
 	}
 
 	var config Configuration
-	err := viper.Unmarshal(&config)
+	err = viper.Unmarshal(&config)
 	if err != nil {
 		return Configuration{}, fmt.Errorf("unable to decode into struct: %w", err)
 	}

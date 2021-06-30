@@ -8,7 +8,7 @@ ADD . /build
 WORKDIR /build
 
 # Generate a binary
-RUN CGO_ENABLED=0 go build -o main .
+RUN CGO_ENABLED=0 go build -o main ./cmd/service/.
 
 FROM scratch
 # the tls certificates:
