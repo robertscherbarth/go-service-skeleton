@@ -5,17 +5,13 @@ build: ## Build the service
 	go build -o main ./cmd/service/.
 
 fmt: ## Run go fmt against code
-	go fmt ./pkg/... ./cmd/...
+	go fmt ./internal/... ./cmd/...
 
 vet: ## Run go vet against code
-	go vet ./pkg/... ./cmd/...
+	go vet ./internal/... ./cmd/...
 
 test: ## Runs the tests
 	go test -cover -race -short -v $(shell go list ./... | grep -v /vendor/ )
-
-swagger: ## Generates swagger documentation
-	GO111MODULE=off go get -u github.com/swaggo/swag/cmd/swag
-	swag init -o ./pkg/docs
 
 help: ## Shows the help
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/robertscherbarth/go-service-skeleton/pkg/api"
-	"github.com/robertscherbarth/go-service-skeleton/pkg/config"
+	"github.com/robertscherbarth/go-service-skeleton/internal/api"
+	"github.com/robertscherbarth/go-service-skeleton/internal/config"
 )
 
 // Service as an example of a go micro-service

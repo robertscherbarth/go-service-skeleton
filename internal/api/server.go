@@ -18,8 +18,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 
-	"github.com/robertscherbarth/go-service-skeleton/pkg/api/middleware"
-	"github.com/robertscherbarth/go-service-skeleton/pkg/config"
+	"github.com/robertscherbarth/go-service-skeleton/internal/api/middleware"
+	"github.com/robertscherbarth/go-service-skeleton/internal/config"
 )
 
 type Server struct {
