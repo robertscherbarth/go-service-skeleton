@@ -6,11 +6,12 @@ logger:
 
 http:
   port: 8080
+  healthcheck:
+    path: "/health"
+  profiling:
+    enabled: false
 
 metrics:
   enabled: true
   path: "/metrics"
   namespace: ""
-
-profiling:
-  enabled: false

@@ -41,10 +41,6 @@ func NewServer(logger *zap.Logger, config config.HTTP, serviceName string, metri
 		},
 	}
 
-	if config.Profiling.Enabled {
-		s.InjectProfiling()
-	}
-
 	s.router.Use(
 		middleware.RequestLogger(logger, serviceName),
 	)
@@ -54,17 +50,21 @@ func NewServer(logger *zap.Logger, config config.HTTP, serviceName string, metri
 		s.InitializeMetrics(metrics)
 	}
 
-	return s
-}
+	s.InitializeHealth(config.HealthCheck)
 
-func (s *Server) InitializeAdminRoutes() {
-	s.router.Route("/admin", func(r chi.Router) {
-		r.Get("/health", s.handleHealthCheck())
-	})
+	if config.Profiling.Enabled {
+		s.InjectProfiling()
+	}
+	return s
 }
 
 func (s *Server) InjectProfiling() {
 	s.router.Mount("/debug", mw.Profiler())
+}
+
+func (s *Server) InitializeHealth(config config.HealthCheck) {
+	s.router.Get(config.Path, s.handleHealthCheck())
+	s.logger.Info(fmt.Sprintf("initialize health enpoint to path %s", config.Path))
 }
 
 // @Description Returns everytime a 200 response code and a simple json which says {status: up}

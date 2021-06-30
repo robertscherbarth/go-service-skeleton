@@ -23,18 +23,23 @@ type Logger struct {
 }
 
 type HTTP struct {
-	Port      int
-	Profiling Profiling
+	Port        int
+	Profiling   Profiling
+	HealthCheck HealthCheck
+}
+
+type HealthCheck struct {
+	Path string
+}
+
+type Profiling struct {
+	Enabled bool
 }
 
 type Metrics struct {
 	Enabled   bool
 	Path      string
 	Namespace string
-}
-
-type Profiling struct {
-	Enabled bool
 }
 
 func Read(prefix, configPath string) (Configuration, error) {
