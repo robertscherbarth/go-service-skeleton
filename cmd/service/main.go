@@ -10,7 +10,7 @@ import (
 // @version 1.0
 // @description skeleton service
 func main() {
-	const configurationFile = "./resources/configuration.yml"
+	const configurationFile = "./configs/configuration.yml"
 
 	configuration, err := config.Read("", configurationFile)
 	if err != nil {

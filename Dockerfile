@@ -20,6 +20,6 @@ COPY --from=builder /build/main /app/
 WORKDIR /app
 
 # add config file
-ADD ./resources /app/resources
+ADD ./configs /app/configs
 
 CMD ["./main"]
