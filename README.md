@@ -6,8 +6,9 @@ does not need a lot of maintenance.
 
 ### Directories
 
+- [api](api/) api specification for http
 - [cmd](cmd/) starting point to run the service
-- [configs](configs/) default config 
+- [configs](configs/) default config
 - [internal](internal/) application code
 
 ### Sources

@@ -1,0 +1,136 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: User management
+  description: A sample crud API
+  contact:
+    name: Robert Scherbarth
+    email: r.scherbarth@icloud.com
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/users:
+    get:
+      summary: Returns all users
+      operationId: findAllUsers
+      responses:
+        '200':
+          description: users response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Creates a new user
+      operationId: addUser
+      requestBody:
+        description: User add to store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/users/{id}:
+    get:
+      summary: Returns a user by ID
+      description: Returns a user based on a single ID
+      operationId: findUserByID
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Deletes a user by ID
+      description: deletes a single user based on the ID supplied
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: user deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      allOf:
+        - $ref: '#/components/schemas/NewUser'
+        - required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique id of the user
+
+    NewUser:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the user
+        tag:
+          type: string
+          description: Type of the user
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
