@@ -1,10 +1,10 @@
-name: container build
+name: publish
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_run:
+    workflows: ["test"]
+    types: 
+      - completed
 
 
 jobs:
