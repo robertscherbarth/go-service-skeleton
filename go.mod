@@ -6,7 +6,7 @@ require (
 	github.com/deepmap/oapi-codegen v1.8.3
 	github.com/getkin/kin-openapi v0.80.0
 	github.com/go-chi/chi v1.5.4
-	github.com/go-chi/chi/v5 v5.0.5
+	github.com/go-chi/chi/v5 v5.0.6
 	github.com/google/uuid v1.3.0
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.29.0 // indirect
