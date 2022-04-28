@@ -1,9 +1,11 @@
 package users
 
 import (
+	"github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/google/uuid"
-	"github.com/robertscherbarth/go-service-skeleton/internal/users/ports"
 	"go.uber.org/zap"
+
+	"github.com/robertscherbarth/go-service-skeleton/internal/users/ports"
 )
 
 type Store interface {
@@ -80,6 +82,6 @@ func (s *Service) convert(user User) ports.User {
 			Name: user.Name,
 			Tag:  &user.Tag,
 		},
-		Id: user.ID.String(),
+		Id: types.UUID(user.ID.String()),
 	}
 }

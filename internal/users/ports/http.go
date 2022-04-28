@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/deepmap/oapi-codegen/pkg/types"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -24,8 +25,8 @@ func NewHttp(logger *zap.Logger, service Service) *Http {
 	return &Http{logger: logger, service: service}
 }
 
-func (h *Http) FindUserByID(w http.ResponseWriter, r *http.Request, id string) {
-	user, err := h.service.FindByID(id)
+func (h *Http) FindUserByID(w http.ResponseWriter, r *http.Request, id types.UUID) {
+	user, err := h.service.FindByID(string(id))
 	if err != nil {
 		h.logger.Error(err.Error(), zap.Error(err))
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -40,8 +41,8 @@ func (h *Http) FindUserByID(w http.ResponseWriter, r *http.Request, id string) {
 	}
 }
 
-func (h *Http) DeleteUser(w http.ResponseWriter, _ *http.Request, id string) {
-	err := h.service.Delete(id)
+func (h *Http) DeleteUser(w http.ResponseWriter, _ *http.Request, id types.UUID) {
+	err := h.service.Delete(string(id))
 	if err != nil {
 		h.logger.Error(err.Error(), zap.Error(err))
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
