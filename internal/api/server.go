@@ -13,7 +13,7 @@ import (
 	"syscall"
 	"time"
 
-	mw "github.com/go-chi/chi/middleware"
+	mw "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"

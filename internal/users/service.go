@@ -1,7 +1,6 @@
 package users
 
 import (
-	"github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 
@@ -46,7 +45,7 @@ func (s *Service) Add(user ports.User) error {
 
 func (s *Service) Delete(id string) error {
 	s.logger.Info("delete user", zap.String("id", id))
-	return s.Delete(id)
+	return s.store.Delete(id)
 }
 
 func (s *Service) FindAll() ([]ports.User, error) {
@@ -82,6 +81,6 @@ func (s *Service) convert(user User) ports.User {
 			Name: user.Name,
 			Tag:  &user.Tag,
 		},
-		Id: types.UUID(user.ID.String()),
+		Id: user.ID,
 	}
 }

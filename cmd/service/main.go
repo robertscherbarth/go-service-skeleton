@@ -1,7 +1,7 @@
 package main
 
 import (
-	chiMiddleware "github.com/deepmap/oapi-codegen/pkg/chi-middleware"
+	chiMiddleware "github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/robertscherbarth/go-service-skeleton/internal/api"
 	"github.com/robertscherbarth/go-service-skeleton/internal/config"
 	"github.com/robertscherbarth/go-service-skeleton/internal/users"
