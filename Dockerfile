@@ -1,4 +1,4 @@
-FROM golang:alpine as builder
+FROM golang:1.21-alpine as builder
 
 # create build folder
 RUN mkdir /build
