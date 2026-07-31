@@ -24,6 +24,9 @@ func main() {
 	}
 
 	logger, err := config.CreateLogger(configuration.Logger.Level, configuration.Logger.Encoding)
+	if err != nil {
+		panic(err)
+	}
 
 	server := api.NewServer(logger, configuration.HTTP, configuration.Name, configuration.Metrics)
 

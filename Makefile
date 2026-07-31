@@ -14,7 +14,8 @@ test: ## Runs the tests
 	go test -cover -race -short -v $(shell go list ./... | grep -v /vendor/ )
 
 openapi_http: ## generate open api resources
-	GO111MODULE=off go get -u github.com/deepmap/oapi-codegen/cmd/oapi-codegen
+	@echo "Generating OpenAPI code..."
+	GO111MODULE=off go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 	oapi-codegen -generate types -o internal/users/ports/openapi_types.gen.go -package ports api/openapi/users.yml
 	oapi-codegen -generate chi-server,spec -o internal/users/ports/openapi_api.gen.go -package ports api/openapi/users.yml
 
